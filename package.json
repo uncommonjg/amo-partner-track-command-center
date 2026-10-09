@@ -1,0 +1,15 @@
+{
+  "name": "amo-command-center",
+  "version": "1.0.0",
+  "description": "AMO B2B GTM Command Center",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
