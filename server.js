@@ -10,7 +10,7 @@ app.use((req, res, next) => {
     'Content-Security-Policy',
     [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https:",
       "style-src 'self' 'unsafe-inline' https:",
       "font-src 'self' data: https:",
       "img-src 'self' data: https: blob:",
