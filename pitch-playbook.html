@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pitch Playbook — AMO Clinical Core</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f5f8;
+  --sidebar-bg:#fbfbfd;
+  --sidebar-border:#e9e9ef;
+  --card-bg:#fff;
+  --card-border:#e6e6ee;
+  --card-shadow:0 1px 3px rgba(20,22,40,.07);
+  --indigo:#4b5ce4;
+  --indigo-lt:#ebedfd;
+  --indigo-dk:#3747c0;
+  --dark:#2b2d45;
+  --dark2:#1e2030;
+  --muted:#8a8fa8;
+  --muted2:#b0b5cc;
+  --text:#1e2030;
+  --text2:#42465a;
+  --green:#27ae60;--green-lt:#e5f4ec;
+  --amber:#e07b00;--amber-lt:#fef3e2;
+  --red:#d63c2f;--red-lt:#ffebee;
+  --blue:#2980b9;--blue-lt:#e3f2fd;
+  --font:'Inter',system-ui,sans-serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13.5px;line-height:1.5;display:flex;min-height:100vh}
+
+/* SIDEBAR */
+aside{width:248px;flex:none;display:flex;flex-direction:column;background:var(--sidebar-bg);border-right:1px solid var(--sidebar-border);padding:14px 10px;overflow-y:auto;position:sticky;top:0;height:100vh;}
+.aside-back{display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:9px;color:var(--muted);font-size:12.5px;font-weight:500;text-decoration:none;transition:background .12s,color .12s;margin-bottom:6px;}
+.aside-back:hover{background:var(--bg);color:var(--text)}
+.aside-divider{height:1px;background:var(--sidebar-border);margin:8px 2px}
+.aside-label{font-size:10.5px;font-weight:600;color:var(--muted2);letter-spacing:.07em;text-transform:uppercase;padding:10px 10px 4px}
+.aside-nav-item{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:9px;cursor:pointer;color:var(--text2);font-size:12.5px;font-weight:500;text-decoration:none;transition:background .12s;border:none;background:none;width:100%;text-align:left;}
+.aside-nav-item:hover{background:var(--bg)}
+.aside-nav-item.active{background:var(--card-bg);border:1px solid var(--card-border);box-shadow:var(--card-shadow);color:var(--text)}
+.aside-nav-dot{width:8px;height:8px;border-radius:50%;flex:none}
+.aside-footer{margin-top:auto;padding-top:12px;border-top:1px solid var(--sidebar-border)}
+.aside-footer-item{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:9px;color:var(--muted);font-size:12px;font-weight:500;text-decoration:none;transition:background .12s,color .12s;}
+.aside-footer-item:hover{background:var(--bg);color:var(--text)}
+
+/* MAIN */
+main{flex:1;display:flex;flex-direction:column;min-width:0;overflow-y:auto}
+
+/* HEADER */
+.page-header{background:linear-gradient(148deg,var(--dark2) 0%,var(--dark) 60%,#1a1d35 100%);padding:28px 36px 24px;border-bottom:1px solid rgba(255,255,255,.07);}
+.page-header h1{font-size:20px;font-weight:700;color:#fff;letter-spacing:-.025em}
+.page-header p{color:rgba(255,255,255,.5);font-size:12.5px;margin-top:4px;max-width:560px}
+.status-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.status-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500}
+.chip-amber{background:rgba(224,123,0,.15);color:#f3c97a}
+.chip-indigo{background:rgba(75,92,228,.2);color:#aab1f5}
+.chip-green{background:rgba(39,174,96,.15);color:#7fe0b0}
+
+/* CONTENT */
+.content{padding:28px 36px;display:flex;flex-direction:column;gap:28px}
+
+/* SECTION HEADER */
+.section-label{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+
+/* CONTEXT CARD */
+.context-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:20px 24px;box-shadow:var(--card-shadow)}
+.context-card h3{font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:10px}
+.context-card p{font-size:13px;color:var(--text2);line-height:1.65}
+.context-card ul{margin:8px 0 0 16px;display:flex;flex-direction:column;gap:5px}
+.context-card li{font-size:13px;color:var(--text2);line-height:1.55}
+.callout{background:var(--indigo-lt);border:1px solid rgba(75,92,228,.2);border-radius:10px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start}
+.callout-icon{font-size:15px;flex:none;margin-top:1px}
+.callout p{font-size:13px;color:var(--indigo-dk);line-height:1.6;font-weight:500}
+.warn-callout{background:var(--amber-lt);border:1px solid rgba(224,123,0,.2);border-radius:10px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start}
+.warn-callout p{font-size:13px;color:#7a4400;line-height:1.6}
+
+/* MATRIX */
+.matrix{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.matrix-header-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:4px;padding:0 2px}
+.matrix-col-label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;text-align:center;padding:6px 0}
+.pitch-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;box-shadow:var(--card-shadow);overflow:hidden}
+.pitch-card-head{padding:14px 18px 12px;border-bottom:1px solid var(--card-border)}
+.pitch-card-type{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.type-pa{color:var(--indigo)}
+.type-do{color:var(--green)}
+.pitch-card-title{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.01em}
+.pitch-card-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.pitch-card-body{padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.pitch-section-title{font-size:10.5px;font-weight:700;color:var(--muted2);letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px}
+.hook-text{font-size:13.5px;font-weight:600;color:var(--text);line-height:1.5;font-style:italic;border-left:3px solid var(--indigo);padding-left:10px}
+.hook-text.do-hook{border-color:var(--green)}
+.body-text{font-size:13px;color:var(--text2);line-height:1.6}
+.objection-list{display:flex;flex-direction:column;gap:8px}
+.objection-item{background:var(--bg);border-radius:8px;padding:10px 12px}
+.objection-q{font-size:12px;font-weight:600;color:var(--red);margin-bottom:3px}
+.objection-a{font-size:12px;color:var(--text2);line-height:1.5}
+.cta-box{background:var(--indigo-lt);border-radius:8px;padding:10px 14px;border:1px solid rgba(75,92,228,.15)}
+.cta-label{font-size:10px;font-weight:700;color:var(--indigo);letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px}
+.cta-text{font-size:13px;font-weight:600;color:var(--indigo-dk);line-height:1.45}
+.cta-box.do-cta{background:var(--green-lt);border-color:rgba(39,174,96,.15)}
+.cta-box.do-cta .cta-label{color:var(--green)}
+.cta-box.do-cta .cta-text{color:#1b5e20}
+
+/* DECISIONS TABLE */
+.decisions-table{width:100%;border-collapse:collapse}
+.decisions-table th{padding:9px 14px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;text-align:left;border-bottom:1px solid var(--card-border);background:var(--bg)}
+.decisions-table td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--card-border);vertical-align:top}
+.decisions-table tr:last-child td{border-bottom:none}
+.decisions-table td:first-child{font-weight:600;color:var(--text);width:28%}
+.decisions-table td:nth-child(2){color:var(--text2)}
+.decision-status{display:inline-flex;align-items:center;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+.ds-pending{background:var(--amber-lt);color:var(--amber)}
+.ds-joel{background:var(--indigo-lt);color:var(--indigo)}
+.ds-done{background:var(--green-lt);color:var(--green)}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0}
+.timeline-item{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--card-border)}
+.timeline-item:last-child{border-bottom:none}
+.timeline-left{display:flex;flex-direction:column;align-items:center;gap:0;width:80px;flex:none}
+.timeline-week{font-size:11px;font-weight:700;color:var(--indigo);text-transform:uppercase;letter-spacing:.05em}
+.timeline-date{font-size:11px;color:var(--muted);margin-top:1px}
+.timeline-content h4{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.timeline-content p{font-size:12.5px;color:var(--text2);line-height:1.55}
+</style>
+</head>
+<body>
+
+<aside>
+  <a href="/" class="aside-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Command Center
+  </a>
+  <div class="aside-divider"></div>
+  <div class="aside-label">On This Page</div>
+  <a href="#context" class="aside-nav-item"><span class="aside-nav-dot" style="background:var(--muted2)"></span>Context</a>
+  <a href="#matrix" class="aside-nav-item active"><span class="aside-nav-dot" style="background:var(--indigo)"></span>The 4-Pitch Matrix</a>
+  <a href="#pa-existing" class="aside-nav-item" style="padding-left:28px"><span class="aside-nav-dot" style="background:#4b5ce4;width:6px;height:6px"></span>PA — Existing</a>
+  <a href="#pa-netnew" class="aside-nav-item" style="padding-left:28px"><span class="aside-nav-dot" style="background:#4b5ce4;width:6px;height:6px"></span>PA — Net New</a>
+  <a href="#do-existing" class="aside-nav-item" style="padding-left:28px"><span class="aside-nav-dot" style="background:#27ae60;width:6px;height:6px"></span>DO — Existing</a>
+  <a href="#do-netnew" class="aside-nav-item" style="padding-left:28px"><span class="aside-nav-dot" style="background:#27ae60;width:6px;height:6px"></span>DO — Net New</a>
+  <a href="#decisions" class="aside-nav-item"><span class="aside-nav-dot" style="background:var(--amber)"></span>Decisions Needed</a>
+  <a href="#next-steps" class="aside-nav-item"><span class="aside-nav-dot" style="background:var(--green)"></span>Next Steps</a>
+  <div class="aside-divider"></div>
+  <div class="aside-label">Tools</div>
+  <a href="/arc-pa-pipeline.html" class="aside-nav-item">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4b5ce4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M7 15V9M12 15V5M17 15v-3"/></svg>
+    ARC-PA Pipeline
+  </a>
+  <div class="aside-footer">
+    <div style="font-size:11px;color:var(--muted2);padding:0 10px">Updated Oct 13, 2026 · Michael/Marlo call</div>
+  </div>
+</aside>
+
+<main>
+  <div class="page-header">
+    <h1>Clinical Core — Pitch Playbook</h1>
+    <p>2-market, 4-pitch framework. Covers PA and DO for both existing customers (upsell) and net new schools (cold intro). Draft v1 — to be reviewed with Nick V and Nic R before launch.</p>
+    <div class="status-row">
+      <span class="status-chip chip-amber">Markets TBD — pending Nick/Nic</span>
+      <span class="status-chip chip-indigo">PA Pitch — ready to build</span>
+      <span class="status-chip chip-indigo">DO Pitch — ready to build</span>
+      <span class="status-chip chip-green">Reviewed by Michael + Marlo</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- CONTEXT -->
+    <div id="context">
+      <div class="section-label">Strategic Context</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="callout">
+          <div class="callout-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b5ce4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <p>Michael's direction (Oct 13): Pick 2 geographic markets. Build a DO pitch and PA pitch for each. For each, build two versions — existing customer (upsell) and net new (cold intro). Run it for 2 weeks. Get feedback. Iterate. The goal is getting told no at least once, not perfecting the pitch before launch.</p>
+        </div>
+        <div class="warn-callout">
+          <div class="callout-icon" style="margin-top:0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e07b00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <p><strong>Bay Path note:</strong> Bay Path is an NDS deal (a few preceptors left to close). One-time cash, not recurring. It is not the right account to center the Clinical Core pitch around — keep it separate from this motion.</p>
+        </div>
+        <div class="context-card">
+          <h3>Why Nick and Nic aren't selling net new yet</h3>
+          <p>They don't want to offer unused capacity to a new school if an existing customer is already using part of that same inventory. Fear of displacing a current relationship. Michael's response: if a net new school wants it badly enough to create a supply conflict, that's a good problem — the supply team solves it. Don't let it block getting in market.</p>
+        </div>
+        <div class="context-card">
+          <h3>The asset that doesn't exist yet</h3>
+          <p>Nobody has written the cold outreach pitch. The "we have something new and exciting for a school that doesn't know us" message. That's what this playbook is building. Nick and Nic have account utilization intel. Joel has the pitch. Together: meetings on the calendar.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATRIX OVERVIEW -->
+    <div id="matrix">
+      <div class="section-label">The 4-Pitch Matrix</div>
+      <div class="context-card" style="padding:0;overflow:hidden">
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr style="background:var(--dark)">
+              <th style="padding:13px 18px;font-size:11px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;text-align:left;width:18%"> </th>
+              <th style="padding:13px 18px;font-size:11px;font-weight:600;color:#aab1f5;letter-spacing:.06em;text-transform:uppercase;text-align:left">Existing Customer — Upsell</th>
+              <th style="padding:13px 18px;font-size:11px;font-weight:600;color:#7fe0b0;letter-spacing:.06em;text-transform:uppercase;text-align:left">Net New — Cold Intro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--card-border)">
+              <td style="padding:14px 18px;font-weight:700;color:var(--indigo);font-size:13px;border-right:1px solid var(--card-border)">PA Programs</td>
+              <td style="padding:14px 18px;font-size:13px;color:var(--text2)">"You've been booking this rotation every year. Let's lock it in and build around it."</td>
+              <td style="padding:14px 18px;font-size:13px;color:var(--text2)">"Programs in your state are hitting preceptor shortages. We have a built hub in your geography, ready now."</td>
+            </tr>
+            <tr>
+              <td style="padding:14px 18px;font-weight:700;color:var(--green);font-size:13px;border-right:1px solid var(--card-border)">DO Programs</td>
+              <td style="padding:14px 18px;font-size:13px;color:var(--text2)">"We've placed your students. Clinical Core is the next chapter — hospital-based, locked in for the academic year."</td>
+              <td style="padding:14px 18px;font-size:13px;color:var(--text2)">"40 DO programs. Same specialty gaps. We have packaged DO hub inventory in your geography with no school using it yet."</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PA EXISTING -->
+    <div id="pa-existing">
+      <div class="section-label">PA Programs — Existing Customer</div>
+      <div class="pitch-card">
+        <div class="pitch-card-head">
+          <div class="pitch-card-type type-pa">PA Programs · Existing Customer</div>
+          <div class="pitch-card-title">Upsell to Clinical Core track</div>
+          <div class="pitch-card-sub">School has been booking PA rotations with AMO — piecemeal or per-slot. May be using 1–2 rotations per year in a specific geography.</div>
+        </div>
+        <div class="pitch-card-body">
+          <div>
+            <div class="pitch-section-title">Opening Hook</div>
+            <div class="hook-text">"You've been booking [specialty] in [geography] for [X] years. We want to make sure you never lose that — and we want to show you what's around it that you're not using."</div>
+          </div>
+          <div>
+            <div class="pitch-section-title">Core Message</div>
+            <div class="body-text">After working with over 65 partner programs, the schools with the best student outcomes — and the least coordinator headaches — are the ones who plan their geography for the full academic year. That's Clinical Core. Lock in what you already have. Expand around it in the same geography. Students don't relocate mid-year. You don't scramble every fall when the calendar opens.</div>
+          </div>
+          <div>
+            <div class="pitch-section-title">Value Props</div>
+            <div class="body-text">
+              <ul style="margin:0 0 0 16px;display:flex;flex-direction:column;gap:5px">
+                <li>Guaranteed access — your rotation is reserved before the calendar opens to anyone else</li>
+                <li>Geographic continuity — wrap additional specialties around your anchor rotation in the same hub</li>
+                <li>Students stay in one city — housing, community, better clinical experience</li>
+                <li>Predictable cost, predictable supply — one contract, one contact, one academic year plan</li>
+                <li>45-day replacement SLA in writing — preceptor drops out, we cover it</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div class="pitch-section-title">Objection Flips</div>
+            <div class="objection-list">
+              <div class="objection-item">
+                <div class="objection-q">"We can't commit to a full year."</div>
+                <div class="objection-a">You're already committing every year — you're just doing it reactively. Clinical Core makes that commitment explicit and gives you guaranteed access in return.</div>
+              </div>
+              <div class="objection-item">
+                <div class="objection-q">"We have an internal team that manages this."</div>
+                <div class="objection-a">Your internal team can't guarantee specialty depth across a full geography or provide a replacement within 45 days in writing. What happens when your preceptor pulls out three weeks before the rotation?</div>
+              </div>
+              <div class="objection-item">
+                <div class="objection-q">"We've had bad experiences with placement vendors."</div>
+                <div class="objection-a">We're not a placement vendor. We're a clinical infrastructure partner. [Reference a nearby AMO partner program here.] That program uses us to run their entire Ohio cohort — ask them.</div>
+              </div>
+            </div>
+          </div>
+          <div class="cta-box">
+            <div class="cta-label">Call to Action</div>
+            <div class="cta-text">20 minutes with your clinical coordinator or program director to map what your geographic hub would look like for AY 2027 — before planning locks up.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PA NET NEW -->
+    <div id="pa-netnew">
+      <div class="section-label">PA Programs — Net New</div>
+      <div class="pitch-card">
+        <div class="pitch-card-head">
+          <div class="pitch-card-type type-pa">PA Programs · Net New</div>
+          <div class="pitch-card-title">Cold intro — hub in their geography</div>
+          <div class="pitch-card-sub">No prior relationship with AMO or minimal historical touchpoint. Don't talk pricing on first contact. Lead with the pain, reference the hub, book the call.</div>
+        </div>
+        <div class="pitch-card-body">
+          <div>
+            <div class="pitch-section-title">Opening Hook</div>
+            <div class="hook-text">"PA programs in [State] are facing a 40%+ preceptor shortage in [specialty]. ARC-PA reviewers are flagging it. We built a hub in [geography] to solve exactly that — and we have capacity for your cohort in AY 2027."</div>
+          </div>
+          <div>
+            <div class="pitch-section-title">Core Message</div>
+            <div class="body-text">AMO has built clinical hub markets specifically for PA programs — verified, credentialed preceptors across all ARC-PA required rotation types, in geographic clusters so students aren't bouncing between cities. We work with [X] PA programs nationally. Programs that come to us typically come because they've lost a preceptor last-minute or are in a specialty they can't find on their own. We'd rather talk before that moment happens.</div>
+          </div>
+          <div>
+            <div class="pitch-section-title">Value Props</div>
+            <div class="body-text">
+              <ul style="margin:0 0 0 16px;display:flex;flex-direction:column;gap:5px">
+                <li>Ready-built inventory in their geography — no cold-start, no building from scratch</li>
+                <li>Specialty mix covers all ARC-PA required rotation types</li>
+                <li>Academic year planning support — we map your cohort against available inventory before calendar opens</li>
+                <li>45-day replacement SLA in writing</li>
+                <li>Programs nearby that can speak to the experience (use ARC-PA annotated list for warm references)</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div class="pitch-section-title">Objection Flips</div>
+            <div class="objection-list">
+              <div class="objection-item">
+                <div class="objection-q">"We handle our clinical placements internally."</div>
+                <div class="objection-a">Most programs said that before their preceptor base started contracting. We're not replacing your process — we're the safety net for the specialties your internal team can't consistently source.</div>
+              </div>
+              <div class="objection-item">
+                <div class="objection-q">"We haven't heard of AMO."</div>
+                <div class="objection-a">That's exactly what this call is for. We work with [nearby program name]. I can connect you with their clinical director if it's helpful to hear it from a peer program.</div>
+              </div>
+            </div>
+          </div>
+          <div class="cta-box">
+            <div class="cta-label">Call to Action</div>
+            <div class="cta-text">20-minute call with [Nic R / Nick V] to see what AMO's [geography] hub looks like for your specialty mix and AY 2027 cohort size. No commitment — just a map of what's available.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DO EXISTING -->
+    <div id="do-existing">
+      <div class="section-label">DO Programs — Existing Customer</div>
+      <div class="pitch-card">
+        <div class="pitch-card-head">
+          <div class="pitch-card-type type-do">DO Programs · Existing Customer</div>
+          <div class="pitch-card-title">Upsell to academic year hub commitment</div>
+          <div class="pitch-card-sub">School has done rotation business with AMO — possibly electives, possibly a trial. Relationship exists but isn't structured. They're not on a full track.</div>
+        </div>
+        <div class="pitch-card-body">
+          <div>
+            <div class="pitch-section-title">Opening Hook</div>
+            <div class="hook-text">"We've placed [X] of your students in [geography]. Clinical Core is what the next chapter looks like — not just slots, but an academic year plan built around your COCA requirements."</div>
+          </div>
+          <div>
+            <div class="pitch-section-title">Core Message</div>
+            <div class="body-text">DO programs have a different compliance burden than PA programs — COCA inpatient requirements, OMM access, hospital-based tracks. Most DO programs are piecing this together one rotation at a time. Clinical Core gives you a geographic hub with hospital-based tracks locked in for the full academic year. Your students stay in one city. Their continuity improves. Your coordinators aren't rebuilding the plan every semester.</div>
+          </div>
+          <div>
+            <div class="pitch-section-title">Value Props</div>
+            <div class="body-text">
+              <ul style="margin:0 0 0 16px;display:flex;flex-direction:column;gap:5px">
+                <li>Hospital-based tracks with inpatient access — covers COCA core rotation requirements</li>
+                <li>Geographic hub — students who stay in one geography for the year get better clinical continuity and outcomes</li>
+                <li>Academic year reserved — slots secured before any other program can access them</li>
+                <li>Elective rotation options wrapped around core tracks in the same hub</li>
+                <li>One contract, one point of contact for the full cohort</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div class="pitch-section-title">Objection Flips</div>
+            <div class="objection-list">
+              <div class="objection-item">
+                <div class="objection-q">"We have health system partnerships that cover our sites."</div>
+                <div class="objection-a">Great — those cover your anchor sites. Clinical Core covers what your health system doesn't: elective subspecialties, geographic flexibility for students not based near your anchor, and the backup when your health system contact changes.</div>
+              </div>
+              <div class="objection-item">
+                <div class="objection-q">"We're not sure this is the right fit for a DO program."</div>
+                <div class="objection-a">Fair — let us show you the specific track we've built for DO programs in [geography]. It's not a PA product with a DO label. It's built around COCA requirements and hospital access. 20 minutes to walk through the map.</div>
+              </div>
+            </div>
+          </div>
+          <div class="cta-box do-cta">
+            <div class="cta-label">Call to Action</div>
+            <div class="cta-text">20-minute call to map what an AY 2027 DO hub schedule would look like for your cohort in [geography] — built around your COCA rotation requirements.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DO NET NEW -->
+    <div id="do-netnew">
+      <div class="section-label">DO Programs — Net New</div>
+      <div class="pitch-card">
+        <div class="pitch-card-head">
+          <div class="pitch-card-type type-do">DO Programs · Net New</div>
+          <div class="pitch-card-title">Cold intro — packaged DO hub inventory</div>
+          <div class="pitch-card-sub">No relationship with AMO. Most likely the OMED scenario. Lead with the hub, make the elective rotation offer the door-opener.</div>
+        </div>
+        <div class="pitch-card-body">
+          <div>
+            <div class="pitch-section-title">Opening Hook</div>
+            <div class="hook-text">"There are 40 DO programs nationally. Every one of them has the same elective rotation gaps. We built a hub in [geography] for exactly that — hospital-based tracks and elective rotations in one place, with no school using it yet."</div>
+          </div>
+          <div>
+            <div class="pitch-section-title">Core Message</div>
+            <div class="body-text">AMO has built hub markets specifically for DO programs — hospital-based tracks, inpatient access, elective rotations across key specialties, all in a geographic cluster. For programs that don't have a health system partnership covering a particular region, this is the turnkey solution. We're not asking for a full commitment on first contact — we want to show you what the hub looks like for your cohort size and rotation mix.</div>
+          </div>
+          <div>
+            <div class="pitch-section-title">Value Props</div>
+            <div class="body-text">
+              <ul style="margin:0 0 0 16px;display:flex;flex-direction:column;gap:5px">
+                <li>DO-specific track model — built around COCA requirements, not repurposed from PA inventory</li>
+                <li>Geographic hub — students stay in one city, reducing housing and logistics burden</li>
+                <li>Ready now for AY 2027 — no cold-start or preceptor recruitment lag</li>
+                <li>Free elective rotation for one 4th-year student (OMED offer) — gift your program can give to a top student</li>
+                <li>Academic year planning support with guaranteed availability</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div class="pitch-section-title">Objection Flips</div>
+            <div class="objection-list">
+              <div class="objection-item">
+                <div class="objection-q">"We're tied to [health system] for all our sites."</div>
+                <div class="objection-a">Tell us where your gaps are. Our hub covers specialties most health systems won't touch — elective subspecialties, programs outside your system's footprint, and OMM-adjacent rotations. We work around your existing partnerships, not against them.</div>
+              </div>
+              <div class="objection-item">
+                <div class="objection-q">"We've never heard of AMO."</div>
+                <div class="objection-a">That's what the 20 minutes is for. We work with [DO reference program if any]. We're at OMED — come by the booth or let us grab time while you're here. No pitch, just a map of what we have in your geography.</div>
+              </div>
+            </div>
+          </div>
+          <div class="cta-box do-cta">
+            <div class="cta-label">Call to Action</div>
+            <div class="cta-text">Booth conversation at OMED → follow-up 20-minute call with Nick V within the next 2 weeks. We'll map out what the DO hub looks like for your geography before AY 2027 planning locks up.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DECISIONS NEEDED -->
+    <div id="decisions">
+      <div class="section-label">Decisions Needed — Nick + Nic Review</div>
+      <div class="context-card" style="padding:0;overflow:hidden">
+        <table class="decisions-table">
+          <thead>
+            <tr>
+              <th>Decision</th>
+              <th>What's needed</th>
+              <th style="width:110px;text-align:center">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Which 2 markets?</td>
+              <td>Ohio / Lima is the obvious first candidate given hub velocity. Second market TBD — Indiana? Mid-Atlantic? New England? Nick and Nic pick.</td>
+              <td style="text-align:center"><span class="decision-status ds-pending">Pending</span></td>
+            </tr>
+            <tr>
+              <td>Do-not-interrupt list</td>
+              <td>Which existing accounts are in active conversations and shouldn't receive cold outreach? Joel needs this before any sequences go live.</td>
+              <td style="text-align:center"><span class="decision-status ds-pending">Pending</span></td>
+            </tr>
+            <tr>
+              <td>Existing customer list by market</td>
+              <td>Which schools in each chosen market are already AMO customers? Nic has utilization data in his tool — Joel needs a simple export by geo.</td>
+              <td style="text-align:center"><span class="decision-status ds-pending">Pending</span></td>
+            </tr>
+            <tr>
+              <td>Net new target list</td>
+              <td>Which schools in each market have packaged-up inventory available with no school using it? Marlo's framework: bucket them (current customer / irrelevant / had a touchpoint / truly net new).</td>
+              <td style="text-align:center"><span class="decision-status ds-pending">Pending</span></td>
+            </tr>
+            <tr>
+              <td>DO reference program</td>
+              <td>Do we have a DO program we can reference in cold outreach? If not, the net new DO pitch runs without social proof. Need to confirm with Nick V.</td>
+              <td style="text-align:center"><span class="decision-status ds-pending">Pending</span></td>
+            </tr>
+            <tr>
+              <td>Hub market data accuracy</td>
+              <td>Kyle flagged hub markets in current materials look incorrect. Verify with Nick V / Nic R before using any specific hub geography claims in external-facing materials.</td>
+              <td style="text-align:center"><span class="decision-status ds-joel">Joel owns</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- NEXT STEPS -->
+    <div id="next-steps">
+      <div class="section-label">Next Steps + Timeline</div>
+      <div class="context-card" style="padding:0;overflow:hidden">
+        <div class="timeline" style="padding:0 20px">
+          <div class="timeline-item" style="padding-top:16px">
+            <div class="timeline-left">
+              <div class="timeline-week">This week</div>
+              <div class="timeline-date">Oct 13–17</div>
+            </div>
+            <div class="timeline-content">
+              <h4>Market + Account Selection — Nick/Nic session</h4>
+              <p>Joel gets time with both Nicks. They define the 2 markets, the do-not-interrupt list, and the existing customer vs. net new buckets per market. That's the gate for everything below.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left">
+              <div class="timeline-week">Next</div>
+              <div class="timeline-date">Oct 14–20</div>
+            </div>
+            <div class="timeline-content">
+              <h4>Build pitch collateral</h4>
+              <p>PA one-pager (existing + net new versions). DO one-pager (existing + net new versions). Email outreach sequences for cold intro. Pipeline tracker. All market-specific once markets are confirmed.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left">
+              <div class="timeline-week">Launch</div>
+              <div class="timeline-date">Oct 20–21</div>
+            </div>
+            <div class="timeline-content">
+              <h4>Go to market — get told no</h4>
+              <p>Outreach goes live. Joel books meetings, hands to Nick/Nic. Capture every objection. The goal is 2 weeks of feedback, not 2 weeks of perfecting the pitch.</p>
+            </div>
+          </div>
+          <div class="timeline-item" style="padding-bottom:16px">
+            <div class="timeline-left">
+              <div class="timeline-week">Iterate</div>
+              <div class="timeline-date">Oct 27+</div>
+            </div>
+            <div class="timeline-content">
+              <h4>Debrief + v2</h4>
+              <p>What are the objections? Where's the friction? What do we need to demonstrate to get to yes? That feedback shapes the next version of the pitch and the offering. Report to Michael on Friday calls.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<script>
+// Smooth scroll for sidebar nav
+document.querySelectorAll('.aside-nav-item[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.querySelectorAll('.aside-nav-item').forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    }
+  });
+});
+// Highlight active section on scroll
+const sections = ['context','matrix','pa-existing','pa-netnew','do-existing','do-netnew','decisions','next-steps'];
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      document.querySelectorAll('.aside-nav-item[href^="#"]').forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) observer.observe(el);
+});
+</script>
+</body>
+</html>

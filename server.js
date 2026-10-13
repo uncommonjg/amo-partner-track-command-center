@@ -26,6 +26,10 @@ app.get('/arc-pa-pipeline', (req, res) => {
   res.sendFile(path.join(__dirname, 'arc-pa-pipeline.html'));
 });
 
+app.get('/pitch-playbook', (req, res) => {
+  res.sendFile(path.join(__dirname, 'pitch-playbook.html'));
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
