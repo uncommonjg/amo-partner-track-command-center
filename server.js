@@ -38,6 +38,14 @@ app.get('/outbound-pilot', (req, res) => {
   res.sendFile(path.join(__dirname, 'outbound-pilot.html'));
 });
 
+app.get('/pa-one-pager', (req, res) => {
+  res.sendFile(path.join(__dirname, 'pa-one-pager.html'));
+});
+
+app.get('/do-one-pager', (req, res) => {
+  res.sendFile(path.join(__dirname, 'do-one-pager.html'));
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMO Clinical Core — DO Programs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,500;6..12,600;6..12,700;6..12,800;6..12,900&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange: #e86e00;
+    --orange-light: #fff3e8;
+    --teal: #0e8fa0;
+    --teal-light: #e6f7f9;
+    --dark: #12131f;
+    --mid: #3a3c52;
+    --muted: #6b6d85;
+    --rule: #e4e4ee;
+    --bg: #ffffff;
+    --font: 'Nunito Sans', 'Avenir Next', Avenir, system-ui, sans-serif;
+  }
+
+  html, body {
+    font-family: var(--font);
+    background: #f0f0f4;
+    color: var(--dark);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    background: var(--bg);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ---- HEADER ---- */
+  .header {
+    background: var(--dark);
+    padding: 28px 48px 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo-block {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-mark {
+    width: 38px;
+    height: 38px;
+    background: var(--orange);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-text {
+    font-size: 20px;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: -.02em;
+  }
+
+  .header-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--teal);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    background: rgba(14,143,160,.15);
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(14,143,160,.3);
+  }
+
+  /* ---- HERO ---- */
+  .hero {
+    padding: 52px 48px 44px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--teal);
+  }
+
+  .hero-eyebrow {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--teal);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+    font-weight: 900;
+    color: var(--dark);
+    letter-spacing: -.03em;
+    line-height: 1.15;
+    max-width: 580px;
+    margin-bottom: 18px;
+  }
+
+  .hero h1 span {
+    color: var(--teal);
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 580px;
+  }
+
+  /* ---- STATS ROW ---- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .stat {
+    padding: 26px 30px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .stat:last-child { border-right: none; }
+
+  .stat .num {
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--dark);
+    letter-spacing: -.04em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat .num span { color: var(--teal); }
+
+  .stat .label {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  /* ---- TWO-COL BODY ---- */
+  .body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    flex: 1;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .col {
+    padding: 36px 40px;
+  }
+
+  .col:first-child {
+    border-right: 1px solid var(--rule);
+  }
+
+  .col-label {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--teal);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .col-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .col h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--dark);
+    letter-spacing: -.02em;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+
+  .col p {
+    font-size: 13px;
+    color: var(--mid);
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+
+  /* ---- PAIN POINTS ---- */
+  .pain-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 4px;
+  }
+
+  .pain-list li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 13px;
+    color: var(--mid);
+    line-height: 1.5;
+  }
+
+  .pain-list li:last-child { border-bottom: none; }
+
+  .pain-icon {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border-radius: 50%;
+    background: var(--teal-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  /* ---- PILLARS ---- */
+  .pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 4px;
+  }
+
+  .pillar {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .pillar-icon {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    background: var(--teal-light);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pillar-text h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 2px;
+  }
+
+  .pillar-text p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+
+  /* ---- SLA CALLOUT ---- */
+  .sla-block {
+    background: var(--dark);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-top: 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .sla-num {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--teal);
+    letter-spacing: -.04em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .sla-text h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+
+  .sla-text p {
+    font-size: 12px;
+    color: #8b8da8;
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+
+  /* ---- PROOF BAR ---- */
+  .proof {
+    padding: 22px 48px;
+    background: var(--teal-light);
+    border-bottom: 1px solid #b2e2e9;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .proof-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    white-space: nowrap;
+  }
+
+  .proof-items {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .proof-item {
+    font-size: 12.5px;
+    color: #0a5f6b;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .proof-dot {
+    width: 5px;
+    height: 5px;
+    min-width: 5px;
+    border-radius: 50%;
+    background: var(--teal);
+  }
+
+  /* ---- FOOTER / CTA ---- */
+  .footer {
+    padding: 24px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-left h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--dark);
+    letter-spacing: -.01em;
+    margin-bottom: 4px;
+  }
+
+  .footer-left p {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  .footer-contact {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  .footer-contact strong {
+    color: var(--dark);
+    font-weight: 700;
+  }
+
+  /* ---- PRINT ---- */
+  @media print {
+    html, body { background: #fff; }
+    .page {
+      width: 100%;
+      min-height: 100vh;
+      margin: 0;
+      box-shadow: none;
+    }
+  }
+
+  @media screen {
+    body { padding: 40px 20px; }
+    .page { box-shadow: 0 4px 40px rgba(0,0,0,.12); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-block">
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      </div>
+      <span class="logo-text">AMO</span>
+    </div>
+    <span class="header-tag">DO Programs &nbsp;·&nbsp; Clinical Core</span>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Regional clinical placement infrastructure</div>
+    <h1>DO rotations in your region.<br><span>Built, credentialed, ready.</span></h1>
+    <p class="hero-sub">AMO Clinical Core manages a regional preceptor network structured for osteopathic programs. Students rotate within your geographic footprint, with specialty matching, COCA-aligned documentation, and a written replacement guarantee.</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="num"><span>45</span>-day</div>
+      <div class="label">Preceptor replacement SLA, guaranteed in writing. If a preceptor falls through, AMO covers it.</div>
+    </div>
+    <div class="stat">
+      <div class="num"><span>0</span> miles</div>
+      <div class="label">Average student relocation required. Placements are built around your program's geographic market.</div>
+    </div>
+    <div class="stat">
+      <div class="num">AY <span>'28</span></div>
+      <div class="label">Lock in rotation capacity now. Academic-year commitments are available for 2027-28 planning.</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- LEFT: The Problem -->
+    <div class="col">
+      <div class="col-label">The DO placement challenge</div>
+      <h3>Regional programs need regional preceptors. They're harder to find than most realize.</h3>
+      <ul class="pain-list">
+        <li>
+          <div class="pain-icon">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0e8fa0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          DO students are expected to stay close to their program's base. Rotations that require significant travel create attrition risk and student hardship.
+        </li>
+        <li>
+          <div class="pain-icon">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0e8fa0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          Building a local preceptor network from scratch takes years. Maintaining it takes more. New and growing programs are especially exposed.
+        </li>
+        <li>
+          <div class="pain-icon">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0e8fa0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          COCA requires documented placement capacity. Specialty gaps that surface during accreditation review create timelines programs can't afford.
+        </li>
+        <li>
+          <div class="pain-icon">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0e8fa0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          At scale, managing rotation logistics internally is a coordinator tax with compounding overhead as class size grows.
+        </li>
+      </ul>
+    </div>
+
+    <!-- RIGHT: The Solution -->
+    <div class="col">
+      <div class="col-label">How Clinical Core works for DO programs</div>
+      <h3>A managed preceptor network, organized around your geographic footprint.</h3>
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0e8fa0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="pillar-text">
+            <h4>Regional placement model</h4>
+            <p>Preceptors are recruited and organized within your program's geographic market. Students rotate locally, with specialty coverage mapped to your curriculum requirements.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0e8fa0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="pillar-text">
+            <h4>DO-experienced preceptors</h4>
+            <p>AMO's network includes preceptors with prior DO student experience. Specialty matching reflects osteopathic curriculum needs, including core clinical rotations.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0e8fa0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="pillar-text">
+            <h4>Academic-year commitment</h4>
+            <p>Programs lock in rotation blocks for the full year, giving students, coordinators, and faculty certainty before the clinical year begins.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0e8fa0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div class="pillar-text">
+            <h4>COCA-aligned documentation</h4>
+            <p>Placement records, preceptor credentials, and affiliation documentation are managed by AMO and provided in a format aligned with accreditation review expectations.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sla-block">
+        <div class="sla-num">45<br><span style="font-size:14px;font-weight:700;color:#fff">days</span></div>
+        <div class="sla-text">
+          <h4>Preceptor replacement guarantee</h4>
+          <p>If a preceptor becomes unavailable, AMO replaces them within 45 days, documented in your contract. Your coordinators stay focused on students, not logistics.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROOF BAR -->
+  <div class="proof">
+    <div class="proof-label">What this enables</div>
+    <div class="proof-items">
+      <div class="proof-item"><div class="proof-dot"></div> Guaranteed regional placements before the academic year starts</div>
+      <div class="proof-item"><div class="proof-dot"></div> COCA documentation managed and ready for review</div>
+      <div class="proof-item"><div class="proof-dot"></div> Grow enrollment without proportional coordinator overhead</div>
+      <div class="proof-item"><div class="proof-dot"></div> Specialty gaps filled without building preceptor relationships from scratch</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">
+      <h3>Walk through what's available in your region.</h3>
+      <p>We'll cover hub coverage, specialty mix, and open capacity for AY 2027-28.</p>
+    </div>
+    <div class="footer-contact">
+      <strong>AMO Clinical Core</strong><br>
+      clinicalcore@amopportunities.org<br>
+      amopportunities.org
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
