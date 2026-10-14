@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outbound Pilot — AMO Clinical Core</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f5f8;
+    --sidebar: #fbfbfd;
+    --sidebar-border: #e9e9ef;
+    --header-bg: #2b2d45;
+    --accent: #4b5ce4;
+    --accent-green: #16a34a;
+    --accent-amber: #d97706;
+    --accent-red: #dc2626;
+    --card-bg: #ffffff;
+    --card-border: #e6e6ee;
+    --card-shadow: 0 1px 3px rgba(20,22,40,.07);
+    --text: #1a1c2e;
+    --text-muted: #6b6f8a;
+    --text-label: #9498b8;
+    --nav-active: #4b5ce4;
+    --font: 'Inter', system-ui, -apple-system, sans-serif;
+    --r: 12px;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* --- SIDEBAR --- */
+  nav {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 248px;
+    min-width: 248px;
+    background: var(--sidebar);
+    border-right: 1px solid var(--sidebar-border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    z-index: 10;
+  }
+
+  .nav-header {
+    padding: 20px 16px 14px;
+    border-bottom: 1px solid var(--sidebar-border);
+  }
+
+  .nav-header .back {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-bottom: 12px;
+    transition: color .15s;
+  }
+  .nav-header .back:hover { color: var(--accent); }
+
+  .nav-header h2 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -.01em;
+  }
+  .nav-header p {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  .nav-section {
+    padding: 12px 10px 4px;
+  }
+
+  .nav-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--text-label);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 0 6px 6px;
+    display: block;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: 9px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 12.5px;
+    font-weight: 500;
+    transition: background .12s, color .12s;
+    cursor: pointer;
+  }
+  .nav-item:hover { background: #f0f0f6; color: var(--text); }
+  .nav-item.active { background: #eef0fc; color: var(--nav-active); font-weight: 600; }
+  .nav-item svg { flex-shrink: 0; }
+
+  .nav-divider {
+    margin: 8px 10px;
+    border: none;
+    border-top: 1px solid var(--sidebar-border);
+  }
+
+  /* --- MAIN --- */
+  main {
+    flex: 1;
+    min-width: 0;
+    padding: 0 32px 64px;
+    max-width: 960px;
+  }
+
+  .page-header {
+    padding: 32px 0 24px;
+    border-bottom: 1px solid var(--card-border);
+    margin-bottom: 28px;
+  }
+
+  .page-header .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .page-header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -.02em;
+    line-height: 1.2;
+  }
+
+  .page-header p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    max-width: 640px;
+  }
+
+  /* --- SECTIONS --- */
+  .section {
+    margin-bottom: 40px;
+    scroll-margin-top: 24px;
+  }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-label);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  /* --- CARDS --- */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--r);
+    box-shadow: var(--card-shadow);
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .card-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+
+  .stat-card .label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 6px;
+  }
+
+  .stat-card .value {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -.02em;
+    line-height: 1;
+  }
+
+  .stat-card .sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* --- ALERT / CALLOUT --- */
+  .callout {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .callout.warning {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+  }
+  .callout.info {
+    background: #eff2ff;
+    border: 1px solid #c7d2fe;
+    color: #3730a3;
+  }
+  .callout.success {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #14532d;
+  }
+  .callout strong { font-weight: 700; }
+
+  /* --- TABLES --- */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    font-size: 13px;
+  }
+
+  thead tr {
+    border-bottom: 1px solid var(--card-border);
+    background: #f8f8fb;
+  }
+
+  th {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f6;
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  td .school-name { font-weight: 600; color: var(--text); }
+  td .school-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .badge.probation { background: #fef3c7; color: #92400e; }
+  .badge.provisional { background: #dbeafe; color: #1e40af; }
+  .badge.continued { background: #f3f4f6; color: #6b7280; }
+  .badge.new-program { background: #d1fae5; color: #065f46; }
+  .badge.system { background: #ede9fe; color: #5b21b6; }
+  .badge.highest { background: #fee2e2; color: #991b1b; }
+
+  /* --- PRIORITY FLAG --- */
+  .priority {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+  .priority.hot { background: #fee2e2; color: #991b1b; }
+  .priority.warm { background: #fef3c7; color: #92400e; }
+  .priority.target { background: #eff2ff; color: #3730a3; }
+
+  /* --- EMAIL TEMPLATES --- */
+  .email-block {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--r);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .email-header {
+    padding: 14px 20px 12px;
+    border-bottom: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .email-header h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .email-type-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .email-type-badge.pa { background: #eff2ff; color: #3730a3; }
+  .email-type-badge.do { background: #d1fae5; color: #065f46; }
+
+  .email-subjects {
+    padding: 14px 20px 10px;
+    border-bottom: 1px solid #f5f5f8;
+    background: #fafafa;
+  }
+
+  .email-subjects .label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 8px;
+  }
+
+  .subject-option {
+    font-size: 13px;
+    color: var(--text);
+    padding: 4px 0;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .subject-option .opt {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-label);
+    min-width: 24px;
+  }
+
+  .email-body {
+    padding: 18px 20px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+    font-family: var(--font);
+  }
+
+  .email-body .placeholder {
+    background: #fef3c7;
+    border-radius: 3px;
+    padding: 0 3px;
+    font-weight: 600;
+    color: #92400e;
+  }
+
+  .email-notes {
+    padding: 12px 20px;
+    border-top: 1px solid var(--card-border);
+    background: #f8f8fb;
+  }
+
+  .email-notes .label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 6px;
+  }
+
+  .email-notes ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .email-notes li {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 2px 0 2px 14px;
+    position: relative;
+  }
+
+  .email-notes li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--text-label);
+  }
+
+  /* --- SEQUENCE STEPS --- */
+  .sequence {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--r);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .sequence-header {
+    padding: 14px 20px 12px;
+    border-bottom: 1px solid var(--card-border);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .seq-step {
+    display: flex;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f5f5f8;
+    align-items: flex-start;
+  }
+
+  .seq-step:last-child { border-bottom: none; }
+
+  .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #eff2ff;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .step-content h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .step-content p {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .step-timing {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    background: #eff2ff;
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+    margin-left: auto;
+  }
+
+  /* --- SYSTEM PLAY HIGHLIGHT --- */
+  .system-play {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    border-radius: var(--r);
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    color: #e0e7ff;
+  }
+
+  .system-play h3 {
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: -.01em;
+  }
+
+  .system-play p {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .system-play .numbers {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .system-play .num-item {
+    text-align: center;
+  }
+
+  .system-play .num-item .v {
+    font-size: 22px;
+    font-weight: 900;
+    color: #fff;
+    display: block;
+    letter-spacing: -.02em;
+  }
+
+  .system-play .num-item .l {
+    font-size: 11px;
+    color: #a5b4fc;
+    font-weight: 600;
+  }
+
+  /* --- SCROLLSPY --- */
+  .active-section { color: var(--nav-active) !important; font-weight: 600 !important; background: #eef0fc !important; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav>
+  <div class="nav-header">
+    <a href="/" class="back">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Command Center
+    </a>
+    <h2>Outbound Pilot</h2>
+    <p>Atlanta + Houston · Oct 2026</p>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-label">Overview</span>
+    <a href="#context" class="nav-item" onclick="scrollTo('context')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Pilot Context
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-label">PA Targets</span>
+    <a href="#pa-atlanta" class="nav-item" onclick="scrollTo('pa-atlanta')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Atlanta / Southeast
+    </a>
+    <a href="#pa-houston" class="nav-item" onclick="scrollTo('pa-houston')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Houston / Southwest
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-label">DO Targets</span>
+    <a href="#do-atlanta" class="nav-item" onclick="scrollTo('do-atlanta')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Atlanta / Southeast
+    </a>
+    <a href="#do-houston" class="nav-item" onclick="scrollTo('do-houston')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Houston / Southwest
+    </a>
+    <a href="#do-system" class="nav-item" onclick="scrollTo('do-system')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      System Play (VCOM)
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-label">Pitch Assets</span>
+    <a href="#email-pa" class="nav-item" onclick="scrollTo('email-pa')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      PA Cold Email
+    </a>
+    <a href="#email-do" class="nav-item" onclick="scrollTo('email-do')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      DO Cold Email
+    </a>
+    <a href="#sequence" class="nav-item" onclick="scrollTo('sequence')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Outreach Sequence
+    </a>
+  </div>
+
+  <hr class="nav-divider">
+
+  <div class="nav-section">
+    <a href="/pitch-playbook.html" class="nav-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4b5ce4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Pitch Playbook
+    </a>
+    <a href="/arc-pa-pipeline.html" class="nav-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4b5ce4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M7 15V9M12 15V5M17 15v-3"/></svg>
+      ARC-PA Pipeline
+    </a>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main>
+  <div class="page-header">
+    <div class="eyebrow">Geo-Focused Outbound Pilot</div>
+    <h1>Atlanta + Houston</h1>
+    <p>Top PA and DO target accounts for the Oct–Nov outbound pilot. Net new schools only. Deals at Assessing stage or above are off limits.</p>
+  </div>
+
+  <!-- CONTEXT -->
+  <div class="section" id="context">
+    <div class="section-title">Pilot Context</div>
+
+    <div class="callout warning">
+      <strong>HubSpot Stage Rule:</strong> Before any outreach, verify the account is NOT at "Assessing" stage or above in HubSpot. Prospecting stage only. This applies to both PA and DO targets.
+    </div>
+
+    <div class="card-grid three">
+      <div class="stat-card">
+        <div class="label">Pilot Goal</div>
+        <div class="value">$1M</div>
+        <div class="sub">Pipeline by year end · net new schools</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Atlanta Booking Rate</div>
+        <div class="value">~7%</div>
+        <div class="sub">Growth market · newly recruited programs</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">2027 Bookings</div>
+        <div class="value">+160%</div>
+        <div class="sub">vs. 2026 YTD · per Nick V</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;font-size:13px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Geo Strategy</div>
+          <div style="margin-bottom:6px;color:var(--text)"><strong>Atlanta first:</strong> Southeast / east of Mississippi PA schools. Launch week of Oct 20.</div>
+          <div style="color:var(--text)"><strong>Houston second:</strong> Texas + Southwest. Watch Memorial Hermann affiliation agreement risk.</div>
+          <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">Hub pitch works for either geo. Lead with the geography that's closest. It doesn't need to be rigid.</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Outreach Scope</div>
+          <div style="margin-bottom:6px;color:var(--text)"><strong>PA:</strong> All non-partner schools nationwide. Not limited to geo for outreach targeting.</div>
+          <div style="color:var(--text)"><strong>DO:</strong> Regional only (~4-state area per hub). Don't pitch DO programs outside rotation geography.</div>
+          <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">Measure: meetings booked by end of October. That's the only metric right now.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <strong>Messaging rule:</strong> Stay high-level on partnership. Do NOT lead with specialty menus; prospects will self-disqualify on unavailable specialties before taking the call. Get the meeting first.
+    </div>
+  </div>
+
+  <!-- PA ATLANTA -->
+  <div class="section" id="pa-atlanta">
+    <div class="section-title">PA Targets — Atlanta / Southeast</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>School</th>
+            <th>State</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Why Now</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>
+              <div class="school-name">Pfeiffer University</div>
+              <div class="school-sub">Program on ARC-PA probation</div>
+            </td>
+            <td>NC</td>
+            <td><span class="badge probation">Probation</span></td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Accreditation clock is running. Every day without a placement solution is risk. AMO's replacement SLA is the story.</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>
+              <div class="school-name">Trevecca Nazarene University</div>
+              <div class="school-sub">Nashville, TN</div>
+            </td>
+            <td>TN</td>
+            <td><span class="badge probation">Probation</span></td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Nashville market. Probation = urgent need. AMO has Nashville inventory. Direct pitch.</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>
+              <div class="school-name">Bethel University</div>
+              <div class="school-sub">McKenzie, TN</div>
+            </td>
+            <td>TN</td>
+            <td><span class="badge probation">Probation</span></td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Rural Tennessee. Probation = placement crisis. Limited local preceptor ecosystem = strong AMO fit.</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>
+              <div class="school-name">Palm Beach Atlantic University</div>
+              <div class="school-sub">West Palm Beach, FL</div>
+            </td>
+            <td>FL</td>
+            <td><span class="badge probation">Probation</span></td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">South Florida market. AMO has Florida inventory. Probation = active accreditation risk. High urgency.</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>
+              <div class="school-name">University of the Cumberlands</div>
+              <div class="school-sub">Northern Kentucky Campus</div>
+            </td>
+            <td>KY</td>
+            <td><span class="badge probation">Probation</span></td>
+            <td><span class="priority warm">Warm</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Northern KY / Cincinnati metro. Probation. Regional market; verify inventory fit before outreach.</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>
+              <div class="school-name">NC A&T State University</div>
+              <div class="school-sub">Greensboro, NC · HBCU</div>
+            </td>
+            <td>NC</td>
+            <td><span class="badge provisional">Provisional</span></td>
+            <td><span class="priority warm">Warm</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">HBCU, developing program. Minimal clinical site relationships at launch. Building from scratch. High AMO fit.</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>
+              <div class="school-name">Morehouse School of Medicine</div>
+              <div class="school-sub">Atlanta, GA · HBCU</div>
+            </td>
+            <td>GA</td>
+            <td><span class="badge continued">Active</span></td>
+            <td><span class="priority warm">Warm</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Kyle noted "clinical sites are a struggle." HBCU mission school in the Atlanta market. Direct geo match.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-size:11.5px;color:var(--text-muted);margin-top:8px;padding: 0 2px">7 total PA targets in Southeast. All probation/provisional programs except Morehouse; all have documented placement need.</div>
+  </div>
+
+  <!-- PA HOUSTON -->
+  <div class="section" id="pa-houston">
+    <div class="section-title">PA Targets — Houston / Southwest</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>School</th>
+            <th>State</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Why Now</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>
+              <div class="school-name">Northeastern State University</div>
+              <div class="school-sub">Broken Arrow, OK</div>
+            </td>
+            <td>OK</td>
+            <td><span class="badge highest">Probation · T2</span></td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Kyle flagged explicitly: Oklahoma rotations are scarce. Highest-tier account in either region. The lead target for Houston geo outreach.</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>
+              <div class="school-name">University of Oklahoma – Tulsa</div>
+              <div class="school-sub">Tulsa, OK</div>
+            </td>
+            <td>OK</td>
+            <td><span class="badge probation">Probation</span></td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Probation in same Oklahoma market. Both OU-Tulsa and Northeastern State = double Oklahoma play.</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>
+              <div class="school-name">UT Rio Grande Valley</div>
+              <div class="school-sub">Edinburg, TX · Mission-driven</div>
+            </td>
+            <td>TX</td>
+            <td><span class="badge continued">Active</span></td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Kyle flagged: considering reducing class size due to inability to recruit clinical sites. Class size reduction = dean urgency. Lead with the enrollment/revenue angle.</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>
+              <div class="school-name">Harding University</div>
+              <div class="school-sub">Searcy, AR</div>
+            </td>
+            <td>AR</td>
+            <td><span class="badge probation">Probation</span></td>
+            <td><span class="priority warm">Warm</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Probation. Rural Arkansas with limited local preceptor infrastructure. Inventory fit to verify.</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>
+              <div class="school-name">Franciscan Missionaries of Our Lady University</div>
+              <div class="school-sub">Baton Rouge, LA</div>
+            </td>
+            <td>LA</td>
+            <td><span class="badge probation">Probation</span></td>
+            <td><span class="priority warm">Warm</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Probation in Louisiana market. Mission-driven, faith-based institution. Placement gap = accreditation risk.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-size:11.5px;color:var(--text-muted);margin-top:8px;padding: 0 2px">5 total PA targets in Southwest. Northeastern State Oklahoma is the anchor, highest tier in either region. UT Rio Grande Valley is the dean-level conversation.</div>
+  </div>
+
+  <!-- DO ATLANTA -->
+  <div class="section" id="do-atlanta">
+    <div class="section-title">DO Targets — Atlanta / Southeast</div>
+
+    <div class="callout info">
+      <strong>DO outreach is regional.</strong> Only pitch DO programs within ~4 states of the hub. Southeast = GA, TN, NC, FL, SC, VA.
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>School</th>
+            <th>Location</th>
+            <th>Class Size</th>
+            <th>Priority</th>
+            <th>Why AMO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>
+              <div class="school-name">PCOM South Georgia</div>
+              <div class="school-sub">Philadelphia College of Osteopathic Medicine</div>
+            </td>
+            <td>Moultrie, GA</td>
+            <td>~90/yr · growing</td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Rural campus opened 2019. Growing class size. Thin local preceptor infrastructure, which is exactly what AMO fills. Expanding to 90/yr amplifies need.</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>
+              <div class="school-name">Burrell College of Osteopathic Medicine – FL</div>
+              <div class="school-sub">Florida Campus · Brand new 2024</div>
+            </td>
+            <td>Melbourne, FL</td>
+            <td>New · ramping</td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Opened 2024. No legacy preceptor network. COCA accreditation granted. Needs preceptors immediately. Highest-urgency DO target in Southeast.</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>
+              <div class="school-name">LMU-DCOM</div>
+              <div class="school-sub">Lincoln Memorial Univ · Harrogate + Knoxville campuses</div>
+            </td>
+            <td>TN (2 campuses)</td>
+            <td>~459/yr combined</td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">One of the largest DO programs in the Southeast. Rural Appalachian mission. Two campuses = massive rotation volume. Any deal here is high-revenue.</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>
+              <div class="school-name">NSU KPCOM</div>
+              <div class="school-sub">Nova Southeastern University · Dr. Kiran Patel COM</div>
+            </td>
+            <td>Fort Lauderdale + Clearwater, FL</td>
+            <td>~322/yr · two campuses</td>
+            <td><span class="priority warm">Warm</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Largest + oldest DO school in Southeast. Founded 1981. Volume makes placement coordination complex. AMO as infrastructure layer is compelling.</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>
+              <div class="school-name">PCOM Georgia (Main)</div>
+              <div class="school-sub">Philadelphia College of Osteopathic Medicine</div>
+            </td>
+            <td>Suwanee, GA (metro Atlanta)</td>
+            <td>~135/yr</td>
+            <td><span class="priority warm">Warm</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Part of major PCOM system. Metro Atlanta location. Large class size and strong institutional backing. If the South Georgia conversation advances, a system-level PCOM play is possible.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DO HOUSTON -->
+  <div class="section" id="do-houston">
+    <div class="section-title">DO Targets — Houston / Southwest</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>School</th>
+            <th>Location</th>
+            <th>Class Size</th>
+            <th>Priority</th>
+            <th>Why AMO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>
+              <div class="school-name">ARCOM</div>
+              <div class="school-sub">Arkansas College of Osteopathic Medicine</div>
+            </td>
+            <td>Fort Smith, AR</td>
+            <td>~150/yr</td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Embedded in a healthcare system (not a university); non-urban market with limited tertiary care. Rotation demand extends well beyond the local market. COCA exceptional outcome April 2025. Excellent AMO fit.</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>
+              <div class="school-name">NYITCOM – Arkansas State</div>
+              <div class="school-sub">NY Institute of Technology COM</div>
+            </td>
+            <td>Jonesboro, AR</td>
+            <td>~120/yr</td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">NY-based parent institution, Arkansas location. Institutional identity disconnected from local clinical infrastructure. Rural requirement built in. Classic AMO gap: they need external placement infrastructure.</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>
+              <div class="school-name">SHSU College of Osteopathic Medicine</div>
+              <div class="school-sub">Sam Houston State University – Gordy COM</div>
+            </td>
+            <td>Conroe, TX (north Houston)</td>
+            <td>~162/yr</td>
+            <td><span class="priority hot">Hot</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Founded 2019. Rotation network still maturing. Full accreditation April 2024. Growing program with 7 regional zones and 75+ affiliated sites but infrastructure still building. Right time to pitch.</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>
+              <div class="school-name">TCOM</div>
+              <div class="school-sub">UNT Health Science Center · Texas College of Osteopathic Medicine</div>
+            </td>
+            <td>Fort Worth, TX</td>
+            <td>~230/yr · 944 total enrolled</td>
+            <td><span class="priority warm">Warm</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Largest DO program in Texas. Founded 1970. Public institution. At 944 students, placement logistics are massive. AMO as infrastructure at this scale is a significant deal. Longer sales cycle but high-value.</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>
+              <div class="school-name">VCOM – Louisiana</div>
+              <div class="school-sub">Edward Via College of Osteopathic Medicine</div>
+            </td>
+            <td>Monroe, LA</td>
+            <td>~160/yr</td>
+            <td><span class="priority target">System Play</span></td>
+            <td style="font-size:12px;color:var(--text-muted)">Newest VCOM campus (2020). Preceptor network still maturing. See VCOM system play below. Approach Louisiana as part of the system conversation, not as a standalone prospect.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DO SYSTEM PLAY -->
+  <div class="section" id="do-system">
+    <div class="section-title">DO Priority — System Play</div>
+
+    <div class="system-play">
+      <h3>VCOM: Carolinas + Virginia + Louisiana</h3>
+      <p>Edward Via College of Osteopathic Medicine operates across 4 campuses: Carolinas (Spartanburg, SC), Virginia (Blacksburg, VA), Louisiana (Monroe, LA), and Auburn (AL). Three of four campuses are in your target geos. VCOM uses a distributed rotation model, pushing students across a wide geography. That's the placement gap AMO fills.</p>
+      <p>If AMO can land a system-level agreement with VCOM, it covers 3 campuses in one deal, not three separate sales conversations. That's how to approach it. Go in at the system level, not the campus level.</p>
+      <div class="numbers">
+        <div class="num-item">
+          <span class="v">3</span>
+          <span class="l">Target campuses</span>
+        </div>
+        <div class="num-item">
+          <span class="v">~480</span>
+          <span class="l">Students/cohort</span>
+        </div>
+        <div class="num-item">
+          <span class="v">~$2,592</span>
+          <span class="l">System total enrolled</span>
+        </div>
+        <div class="num-item">
+          <span class="v">1</span>
+          <span class="l">System-level deal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <strong>PCOM system note:</strong> PCOM South Georgia and PCOM Georgia (main campus, Suwanee) are both part of the Philadelphia College of Osteopathic Medicine system. If South Georgia conversation advances, escalate to the PCOM system level; that covers both campuses and potentially the Philadelphia campus as well.
+    </div>
+  </div>
+
+  <!-- EMAIL — PA -->
+  <div class="section" id="email-pa">
+    <div class="section-title">Pitch Asset — PA Cold Email (Net New)</div>
+
+    <div class="email-block">
+      <div class="email-header">
+        <h3>PA Program — Net New Cold Intro</h3>
+        <span class="email-type-badge pa">PA · Net New</span>
+      </div>
+
+      <div class="email-subjects">
+        <div class="label">Subject Line Options</div>
+        <div class="subject-option">
+          <span class="opt">A</span>
+          <span>Clinical placement infrastructure in <span style="background:#fef3c7;border-radius:3px;padding:0 3px;font-weight:600;color:#92400e">[State]</span> — built, proven, available</span>
+        </div>
+        <div class="subject-option">
+          <span class="opt">B</span>
+          <span>Rotation coverage for <span style="background:#fef3c7;border-radius:3px;padding:0 3px;font-weight:600;color:#92400e">[Program Name]</span> — worth 20 minutes</span>
+        </div>
+        <div class="subject-option">
+          <span class="opt">C (Probation)</span>
+          <span>Accreditation-ready rotation blocks in <span style="background:#fef3c7;border-radius:3px;padding:0 3px;font-weight:600;color:#92400e">[State]</span> — here when you need them</span>
+        </div>
+      </div>
+
+      <div class="email-body">Hi <span class="placeholder">[First Name]</span>,
+
+I'm reaching out because <span class="placeholder">[Program]</span> is in a market where AMO has built something that might be worth your time.
+
+We manage a clinical hub in the <span class="placeholder">[Southeast / Southwest]</span>: a curated, credentialed preceptor network across the core specialties PA programs need most. Schools use it to lock in rotation blocks for the full academic year rather than sourcing individual placements semester by semester.
+
+The short version: your students could rotate in this market without relocating. The network is already built. We're not building it for you specifically, but it fits, and we have open capacity.
+
+For programs navigating ARC-PA requirements, the value gets more specific: documented, guaranteed placement with a 45-day preceptor replacement SLA in writing. That's the kind of infrastructure that shows up in accreditation reviews.
+
+Would it be worth a 20-minute call to see what's available in <span class="placeholder">[State / Metro]</span>?
+
+<span class="placeholder">[Name]</span>
+AMO | Clinical Core
+<span class="placeholder">[Phone]</span></div>
+
+      <div class="email-notes">
+        <div class="label">Personalization Notes</div>
+        <ul>
+          <li>Probation programs: emphasize the SLA and accreditation documentation language. That's their specific pain.</li>
+          <li>New/provisional programs: emphasize "the network is already built — you don't have to build it." They're starting from zero.</li>
+          <li>HBCU programs (Morehouse, NC A&T): mission alignment: underserved communities, diverse preceptor network angle.</li>
+          <li>UT Rio Grande Valley: dean-level pitch: enrollment reduction risk is a tuition revenue story. Use the enrollment/growth angle.</li>
+          <li>Do NOT mention specific specialties in the first email. Get the meeting.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMAIL — DO -->
+  <div class="section" id="email-do">
+    <div class="section-title">Pitch Asset — DO Cold Email (Net New)</div>
+
+    <div class="email-block">
+      <div class="email-header">
+        <h3>DO Program — Net New Cold Intro</h3>
+        <span class="email-type-badge do">DO · Net New</span>
+      </div>
+
+      <div class="email-subjects">
+        <div class="label">Subject Line Options</div>
+        <div class="subject-option">
+          <span class="opt">A</span>
+          <span>DO rotation capacity in <span style="background:#fef3c7;border-radius:3px;padding:0 3px;font-weight:600;color:#92400e">[State]</span> — packaged and available</span>
+        </div>
+        <div class="subject-option">
+          <span class="opt">B</span>
+          <span>Clinical year infrastructure for <span style="background:#fef3c7;border-radius:3px;padding:0 3px;font-weight:600;color:#92400e">[Program]</span> — let's talk</span>
+        </div>
+        <div class="subject-option">
+          <span class="opt">C (New programs)</span>
+          <span>Preceptor network for <span style="background:#fef3c7;border-radius:3px;padding:0 3px;font-weight:600;color:#92400e">[Program]</span> — already built in your market</span>
+        </div>
+      </div>
+
+      <div class="email-body">Hi <span class="placeholder">[First Name]</span>,
+
+AMO manages clinical rotation networks in markets where DO programs often struggle to source specialty-matched preceptors. <span class="placeholder">[State]</span> is one of them.
+
+I'm reaching out specifically because we have preceptor inventory in your region that's structured for DO students: no student relocation required, specialty coverage that aligns with COCA requirements, and preceptors who've worked with DO programs before.
+
+<span class="placeholder">[For new programs:]</span> For programs that are still building clinical partnerships, AMO functions as the infrastructure layer behind your clinical year. You lock in an academic-year commitment; we guarantee coverage and manage all preceptor documentation and credentialing.
+
+<span class="placeholder">[For established programs:]</span> For programs looking to add reliability to an existing network, especially in specialties that are harder to source regionally, AMO can fill the gaps without adding internal coordinator workload.
+
+Would it make sense to walk through what's available in <span class="placeholder">[State / Region]</span> for AY 2027–28?
+
+<span class="placeholder">[Name]</span>
+AMO | Clinical Core
+<span class="placeholder">[Phone]</span></div>
+
+      <div class="email-notes">
+        <div class="label">Personalization Notes</div>
+        <ul>
+          <li>DO programs are more conservative. Tone is warmer and more institutional, not sales-y. Show you know the market.</li>
+          <li>New campuses (Burrell FL, VCOM-Louisiana): use the "infrastructure layer" framing. They're building from scratch.</li>
+          <li>Large programs (LMU-DCOM, TCOM): lead with volume and coordination complexity. "At your scale, placement logistics don't have to be internal."</li>
+          <li>VCOM campuses: approach at the system level, not campus level. Reference the distributed rotation model explicitly.</li>
+          <li>Do NOT use "staffing service" language. Do NOT address PAs or DOs as "Dr." unless they have a doctorate. Use "Director" or their specific title.</li>
+          <li>Do NOT lead with OMM. AMO has minimal OMM inventory; if they ask, that's an NDS/build conversation.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEQUENCE -->
+  <div class="section" id="sequence">
+    <div class="section-title">Outreach Sequence</div>
+
+    <div class="sequence">
+      <div class="sequence-header">Manual or Automated · 4 touches · 3 weeks</div>
+      <div class="seq-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Cold intro email</h4>
+          <p>Send the cold email above. Subject line option A for most accounts, option C for probation programs. No attachment.</p>
+        </div>
+        <div class="step-timing">Day 1</div>
+      </div>
+      <div class="seq-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>LinkedIn connection + note</h4>
+          <p>Connect with the program director or clinical education director on LinkedIn. Short note: "Sent you a note about AMO's clinical placement network in [State]; open to a quick call if the timing's right."</p>
+        </div>
+        <div class="step-timing">Day 3</div>
+      </div>
+      <div class="seq-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Follow-up email — add the hook</h4>
+          <p>One paragraph. Reference the first email. Add a specific hook: for probation programs, mention ARC-PA compliance documentation. For new programs, mention the 45-day replacement SLA. Keep it short.</p>
+        </div>
+        <div class="step-timing">Day 7</div>
+      </div>
+      <div class="seq-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Final touch — direct ask or Starr intro</h4>
+          <p>For PA programs: direct ask for 15 minutes. For accounts where Starr Newman or Scott Massey have a relationship, route through them instead of cold outreach. A warm intro closes at a much higher rate.</p>
+        </div>
+        <div class="step-timing">Day 14</div>
+      </div>
+    </div>
+
+    <div class="callout success">
+      <strong>Warm intro priority:</strong> Before sending cold outreach to any PA school, check with Starr Newman and Scott Massey. If they have a connection at the program, use them. A cold email from AMO is a fallback, not the primary approach where a warm path exists.
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Simple scroll behavior for nav
+  function scrollTo(id) {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Scrollspy
+  const sections = document.querySelectorAll('.section[id]');
+  const navItems = document.querySelectorAll('.nav-item[href^="#"]');
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navItems.forEach(n => n.classList.remove('active'));
+        const active = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

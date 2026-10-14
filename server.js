@@ -34,6 +34,10 @@ app.get('/hub-booking-tracker', (req, res) => {
   res.sendFile(path.join(__dirname, 'hub-booking-tracker.html'));
 });
 
+app.get('/outbound-pilot', (req, res) => {
+  res.sendFile(path.join(__dirname, 'outbound-pilot.html'));
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
