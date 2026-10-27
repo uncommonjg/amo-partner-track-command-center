@@ -46,9 +46,6 @@ app.get('/do-one-pager', (req, res) => {
   res.sendFile(path.join(__dirname, 'do-one-pager.html'));
 });
 
-app.get('/b2c-diagnostic', (req, res) => {
-  res.sendFile(path.join(__dirname, 'b2c-diagnostic.html'));
-});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
